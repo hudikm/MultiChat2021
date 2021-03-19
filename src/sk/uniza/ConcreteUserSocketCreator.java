@@ -1,5 +1,7 @@
 package sk.uniza;
 
+import org.java_websocket.WebSocket;
+
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
@@ -25,5 +27,11 @@ public class ConcreteUserSocketCreator extends UserSocketCreator{
     @Override
     Optional<IUserSocket> createUser(DatagramSocket socket, SocketAddress socketAddress) {
         return  Optional.of(new UdpSocketUser(socketAddress,socket));
+    }
+
+    @Override
+    Optional<IUserSocket> createUser(WebSocket socket, IServerCallBack iServerCallBack) {
+
+        return Optional.empty();
     }
 }
