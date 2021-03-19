@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UdpServer extends AbstractServer implements Runnable {
 
@@ -24,6 +26,41 @@ public class UdpServer extends AbstractServer implements Runnable {
         try {
             while (true) {
                 socket.receive(datagramPacket);
+
+//                for (IUserSocket user : userSocketSet) {
+//                    if(user instanceof UdpSocketUser){
+//                        final UdpSocketUser user1 = (UdpSocketUser) user;
+//                        if(!userSocketSet.contains(user1)){
+//                            userSocketSet.add(user1);
+//                            iServerCallBack.onConnect(user1);
+//                        }else{
+//
+//                        }
+//                    }
+//                }
+                userSocketSet.stream()
+                        .filter(userSocket -> userSocket instanceof UdpSocketUser)
+                        //.map(userSocket -> (UdpSocketUser)userSocket)
+                        .map(UdpSocketUser.class::cast)
+                        .filter(udpSocketUser -> udpSocketUser.getSocketAddress().equals(datagramPacket.getSocketAddress()))
+                        .findAny()
+                        .ifPresentOrElse(
+                                udpSocketUser -> {
+                                    final String inputString = new String(datagramPacket.getData(), 0, datagramPacket.getLength(), StandardCharsets.UTF_8);
+                                    if (inputString.equalsIgnoreCase("exit")) {
+                                        iServerCallBack.onDisconnect(udpSocketUser);
+                                    } else {
+                                        iServerCallBack.onReceive(udpSocketUser, inputString);
+                                    }
+                                },
+                                () -> {
+                                    userSocketCreator.createUser(socket, datagramPacket.getSocketAddress())
+                                            .ifPresent(userSocket -> {
+                                                iServerCallBack.onConnect(userSocket);
+                                                userSocketCreator.registerUser(userSocket, userSocketSet);
+                                            });
+                                });
+
 
             }
         } catch (IOException e) {

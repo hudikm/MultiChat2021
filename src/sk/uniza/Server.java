@@ -12,10 +12,12 @@ public class Server implements IServerCallBack {
     private final Logger logger = Logger.getLogger("Server");
 
     void startServer() {
+        Thread udpThread = new UdpServer(concreteUserSocketCreator, userSocketSet, this).startServer(9000);
         Thread tcpThread = new TcpServer(concreteUserSocketCreator, userSocketSet, this).startServer(9001);
 
         try {
             tcpThread.join();
+            udpThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -8,6 +8,10 @@ import java.nio.charset.StandardCharsets;
 
 public class UdpSocketUser implements IUserSocket {
 
+    public SocketAddress getSocketAddress() {
+        return socketAddress;
+    }
+
     private final SocketAddress socketAddress;
     private final DatagramSocket socket;
     private final DatagramPacket datagramPacket;
