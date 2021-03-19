@@ -3,12 +3,12 @@ package sk.uniza;
 import java.util.Set;
 
 public abstract class AbstractServer {
-    final protected ConcreteUserSocketCreator concreteUserSocketCreator;
+    final protected UserSocketCreator userSocketCreator;
     final protected Set<IUserSocket> userSocketSet;
 
 
-    protected AbstractServer(ConcreteUserSocketCreator concreteUserSocketCreator, Set<IUserSocket> userSocketSet) {
-        this.concreteUserSocketCreator = concreteUserSocketCreator;
+    protected AbstractServer(UserSocketCreator userSocketCreator, Set<IUserSocket> userSocketSet) {
+        this.userSocketCreator = userSocketCreator;
         this.userSocketSet = userSocketSet;
     }
 

@@ -22,10 +22,10 @@ public class TcpServer extends AbstractServer implements Runnable{
                 try {
                     Socket socket = serverSocket.accept();
 
-                    concreteUserSocketCreator.createUser(socket, iServerCallBack)
+                    userSocketCreator.createUser(socket, iServerCallBack)
                             .ifPresent(userSocket -> {
                                 iServerCallBack.onConnect(userSocket);
-                                concreteUserSocketCreator.registerUser(userSocket, userSocketSet);
+                                userSocketCreator.registerUser(userSocket, userSocketSet);
                                 userSocket.startListening();
                             });
 
