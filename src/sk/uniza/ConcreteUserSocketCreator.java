@@ -24,6 +24,6 @@ public class ConcreteUserSocketCreator extends UserSocketCreator{
 
     @Override
     Optional<IUserSocket> createUser(DatagramSocket socket, SocketAddress socketAddress) {
-        return Optional.empty();
+        return  Optional.of(new UdpSocketUser(socketAddress,socket));
     }
 }
