@@ -67,6 +67,7 @@ public class WebSocketServer extends AbstractServer {
         final InnerWebSocketServer innerWebSocketServer = new InnerWebSocketServer(new InetSocketAddress(port));
 
         final Thread thread = new Thread(innerWebSocketServer::run);
+        thread.start();
 
         return thread;
     }
