@@ -31,7 +31,6 @@ public class ConcreteUserSocketCreator extends UserSocketCreator{
 
     @Override
     Optional<IUserSocket> createUser(WebSocket socket, IServerCallBack iServerCallBack) {
-
-        return Optional.empty();
+        return Optional.of(new WebSocketUser(socket,iServerCallBack));
     }
 }

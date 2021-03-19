@@ -14,10 +14,12 @@ public class Server implements IServerCallBack {
     void startServer() {
         Thread udpThread = new UdpServer(concreteUserSocketCreator, userSocketSet, this).startServer(9000);
         Thread tcpThread = new TcpServer(concreteUserSocketCreator, userSocketSet, this).startServer(9001);
+        final Thread webSocThread = new WebSocketServer(concreteUserSocketCreator, userSocketSet, this).startServer(8887);
 
         try {
             tcpThread.join();
             udpThread.join();
+            webSocThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
